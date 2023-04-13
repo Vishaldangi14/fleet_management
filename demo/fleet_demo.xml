@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="demo_fleet_01" model="vehicle.fleet">
+            <field name="model_name">BMW X5</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_02" model="vehicle.fleet">
+            <field name="model_name">AUDI A6</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_03" model="vehicle.fleet">
+            <field name="model_name">Volvo XC90</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_04" model="vehicle.fleet">
+            <field name="model_name">Jaguar F-Pace</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_05" model="vehicle.fleet">
+            <field name="model_name">LandRover Velar</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_06" model="vehicle.fleet">
+            <field name="model_name">Mini SE</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_07" model="vehicle.fleet">
+            <field name="model_name">BMW Z4</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_08" model="vehicle.fleet">
+            <field name="model_name">AUDI Q8</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_09" model="vehicle.fleet">
+            <field name="model_name">Volvo S90</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_10" model="vehicle.fleet">
+            <field name="model_name">Jaguar F-Type</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_11" model="vehicle.fleet">
+            <field name="model_name">LndRover Discovery</field>
+            <field name="vehicle_type">car</field>
+        </record>
+        <record id="demo_fleet_12" model="vehicle.fleet">
+            <field name="model_name">Mini Countryman</field>
+            <field name="vehicle_type">car</field>
+        </record>
+    </data>
+</odoo>

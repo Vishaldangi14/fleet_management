@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+        <record id="customer_email_template" model="mail.template">
+            <field name="name">customer card : send by email</field>
+            <field name="model_id" ref="fleet_management.model_customer_fleet"/>
+            <field name="email_from">{{ user.email_formatted }}</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="subject">customer card ( {{ object.name_id.name }})</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hi Bilagscan,
+                        <br/>
+                        <br/>
+                        I have noticed an invoice/voucher, which did not fulfill my expectations. Could you please have
+                        a look?
+                        <br/>
+                        I have following notes to the invoice/voucher.
+                        <br/>
+                        <br/>
+
+                        Name: ${object.name_id}
+                        <br/>
+                        customer name: ${object.company}
+                        <br/>
+                        <br/>
+
+                        Best Regards,
+                        <br/>
+
+                    </p>
+                </div>
+            </field>
+            <field name="report_template" ref="report_customer_name"/>
+<!--            <field name="report_name">customer card_${(object.name_id)}</field>-->
+        </record>
+    </data>
+</odoo>

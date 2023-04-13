@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="Fleet_Management_menu_root"
+        name="Fleet Management"
+        sequence="1"/>
+
+</odoo>

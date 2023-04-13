@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_customer_id_card">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page"/>
+                    <h2>Customer Card</h2>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Customer Name</th>
+                                <th>Car Brand</th>
+                                <th>Email</th>
+                                <th>Gender</th>
+                                <th>Contact</th>
+                                <th>City</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span t-field="o.name_id"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.company"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.email"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.gender"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.contact"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.city"/>
+                                </td>
+                                <td>
+                                    <div t-field="o.image"
+                                         t-options="{'widget':'image','img_style':'width:50px;height:50px;'}"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="report_customer_name" model="ir.actions.report">
+        <field name="name">Customer Card</field>
+        <field name="model">customer.fleet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fleet_management.report_customer_id_card</field>
+        <field name="report_file">fleet_management.report_customer_id_card</field>
+
+        <field name="print_report_name">'customer - %s' % (object.name_id)</field>
+        <field name="binding_model_id" ref="model_customer_fleet"/>
+        <field name="binding_type">report</field>
+    </record>
+
+<!--    Reoprt Xls File print -->
+
+
+    <record id="action_report_customer_card_xls" model="ir.actions.report">
+        <field name="name">Customer card Excel</field>
+        <field name="model">customer.fleet</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">fleet_management.action_report_customer_card</field>
+        <field name="report_file">fleet_management.action_report_customer_card</field>
+        <field name="binding_model_id" ref="model_customer_fleet"/>
+        <field name="binding_type">report</field>
+    </record>
+
+     <record id="action_report_service_excel_card_xlx" model="ir.actions.report">
+        <field name="name">service card Excel</field>
+        <field name="model">fleet.cancel.wiz</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">fleet_management.report_service_excel_card_xls</field>
+        <field name="report_file">fleet_management.report_service_excel_card_xls</field>
+    </record>
+
+</odoo>

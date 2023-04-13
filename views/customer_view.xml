@@ -1,0 +1,196 @@
+<odoo>
+
+    <!-- tree view -->
+
+    <record id="customer_view_tree" model="ir.ui.view">
+        <field name="name">customer.view.tree</field>
+        <field name="model">customer.fleet</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name_id"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="company"/>
+                <!--                <field name="birthdate"/>-->
+                <field name="city"/>
+                <field name="country"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- form view -->
+
+    <record id="customer_view_form" model="ir.ui.view">
+        <field name="name">customer.view.form</field>
+        <field name="model">customer.fleet</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="test_recordset" type="object" string="Done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="sale_order" type="object" class="oe_stat_button" icon="fa-dollar">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">SaleOrder</span>
+                                <span class="o_stat_text">Preview</span>
+                            </div>
+                        </button>
+                        <button name="action_view_customer" type="object" class="oe_stat_button" icon="fa-users">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Customer</span>
+                                <span class="o_stat_text">Preview</span>
+                            </div>
+                        </button>
+
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <group>
+                        <group>
+                            <field name="name_id" required="1" string="CUSTOMER" options='{"always_reload": True}'/>
+                            <field name="mobile" widget='phone'/>
+                            <field name="length_visibility" groups="fleet_management.group_fleetmanagement_customer"
+                                   visible='1'/>
+                            <field name="length_visibility" invisible='1'
+                                   attrs="{'invisible': [('length_visibility', '=', True)]}"/>
+                            <field name="birthdate"/>
+                        </group>
+                        <group>
+                            <field name="age"/>
+                            <field name="gender"/>
+                            <field name="email"/>
+                            <field name="customer_seq"/>
+                            <field name="company"/>
+                            <!--                            <field name="service_id"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Address">
+                            <group>
+                                <group>
+                                    <span class="o_form_label o_td_label" name="address_name">
+                                        <b>Address</b>
+                                    </span>
+                                    <div class="o_address_format">
+                                        <field name="street" placeholder="Street..." class="o_address_street"/>
+                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                        <field name="city" placeholder="City" class="o_address_city"/>
+                                        <field name="states" placeholder="State" class="o_address_city"/>
+                                        <field name="zip" placeholder="ZIP" class="o_address_city"/>
+                                        <field name="country" placeholder="Country" class="o_address_country"/>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- search view -->
+
+    <record id="customer_view_search" model="ir.ui.view">
+        <field name="name">customer.view.search</field>
+        <field name="model">customer.fleet</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name_id"/>
+                <filter name="gender" string="Male" domain="[('gender', '=', 'male')]"/>
+                <filter name="gender" string="Female" domain="[('gender', '=', 'female')]"/>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- kanban view-->
+
+    <record id="customer_view_kanban" model="ir.ui.view">
+        <field name="name">customer.view.kanban</field>
+        <field name="model">customer.fleet</field>
+        <field name="arch" type="xml">
+
+            <kanban>
+                <field name="id"/>
+                <field name="name_id"/>
+                <field name="mobile"/>
+                <field name="company"/>
+                <field name="email"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_card">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('customer.fleet', 'image', record.id.raw_value)"
+                                     alt="image" class="o_image_64_contain"/>
+                            </div>
+                            <div class="oe_kanban_detail">
+                                <bold>
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name_id"/>
+                                    </strong>
+                                </bold>
+                                <div class="o_kanban_tags_section">
+                                    <ul>
+                                        <li>Mobile:
+                                            <field name="mobile"/>
+                                        </li>
+                                        <li>Email:
+                                            <field name="email"/>
+                                        </li>
+                                        <li>Company:
+                                            <field name="company"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- graph view-->
+
+    <record id="customer_view_graph" model="ir.ui.view">
+        <field name="name">customer.view.graph</field>
+        <field name="model">customer.fleet</field>
+        <field name="arch" type="xml">
+            <graph string="customerGraph" type="bar">
+                <field name="name_id"></field>
+            </graph>
+        </field>
+    </record>
+
+
+    <!-- action -->
+
+    <record id="action_customer_details" model="ir.actions.act_window">
+        <field name="name">Customer Details</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">customer.fleet</field>
+        <field name="view_mode">tree,form,graph,kanban</field>
+        <!--        <field name="context">{'code':1}</field>-->
+    </record>
+
+    <!-- menuitem -->
+    <menuitem
+            id="menu_profile"
+            name="Profile"
+            action="action_customer_details"
+            parent="Fleet_Management_menu_root"/>
+
+    <menuitem
+            id="menu_customer_detail"
+            name="Customer"
+            action="action_customer_details"
+            parent="menu_profile"/>
+
+
+</odoo>
