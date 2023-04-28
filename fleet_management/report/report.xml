@@ -33,7 +33,7 @@
                                     <span t-field="o.gender"/>
                                 </td>
                                 <td>
-                                    <span t-field="o.contact"/>
+                                    <span t-field="o.mobile"/>
                                 </td>
                                 <td>
                                     <span t-field="o.city"/>
@@ -50,6 +50,8 @@
         </t>
     </template>
 
+<!--    Report Pdf Customer-->
+
     <record id="report_customer_name" model="ir.actions.report">
         <field name="name">Customer Card</field>
         <field name="model">customer.fleet</field>
@@ -62,7 +64,7 @@
         <field name="binding_type">report</field>
     </record>
 
-<!--    Reoprt Xls File print -->
+    <!--   <<<<<<<<<<< report Xls File print  >>>>>>>>>>>>>>>>>>>> -->
 
 
     <record id="action_report_customer_card_xls" model="ir.actions.report">
@@ -75,7 +77,8 @@
         <field name="binding_type">report</field>
     </record>
 
-     <record id="action_report_service_excel_card_xlx" model="ir.actions.report">
+
+    <record id="action_report_service_excel_card_xlx" model="ir.actions.report">
         <field name="name">service card Excel</field>
         <field name="model">fleet.cancel.wiz</field>
         <field name="report_type">xlsx</field>

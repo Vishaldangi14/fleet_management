@@ -1,18 +1,19 @@
 from odoo import fields, api, models, _
 from datetime import date
+from odoo.exceptions import ValidationError
 
 
 class Services(models.Model):
     _name = 'services.fleet'
     _description = 'Services details'
-    _rec_name = 'vehicle_number'
+    _rec_name = 'name_id'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name_id = fields.Many2one('vehicle.fleet', string="Car Name")
-    car_name = fields.Char(string="Car Brand")
-    car_model = fields.Char(string="Car Model")
-    customer_ids = fields.Many2one("customer.fleet", string="Customer Name")
-    vehicle_model = fields.Char(string="Vehicle_Model")
+    car_name = fields.Char(string="Cars Brand")
+    car_model = fields.Char(string="Vehicle Model")
+    customer_id = fields.Many2one("customer.fleet", string="Customer Name")
+    vehicle_model = fields.Char(string="Service Type")
     vehicle_number = fields.Char(string="Vehicle Number")
     category = fields.Selection([('services', 'Services'), ('contract', 'Contract')], string="Car category")
     active = fields.Boolean(string="Active", default=True)
@@ -21,19 +22,18 @@ class Services(models.Model):
     chassis_number = fields.Text(string="Chassis Number")
     engine_number = fields.Text(string="Engine Number")
     pickup_location = fields.Char(string="Pickup Location")
-    dropoff_location = fields.Char(string="Dropoff Location")
+    dropoff_location = fields.Char(string="Dropff Location")
     customer_contact = fields.Char(string="Customer number")
     customer_complaint = fields.Char(string="Customer Complaint")
     rc_book_number = fields.Text(string="RC Book Number")
     image = fields.Binary(string='Image')
     payment = fields.Float(string='Amount', default='1')
-
-    street = fields.Char(string='Street')
-    street2 = fields.Char(string='Street2')
     city = fields.Char(string='City')
-    states = fields.Char(string='State')
-    zip = fields.Char(string='Zip')
-    country = fields.Char(string='Country')
+    states = fields.Many2one('res.country.state', string='State')
+    country = fields.Many2one('res.country', string='Country')
+    city1 = fields.Char(string='City')
+    states1 = fields.Many2one('res.country.state', string='State')
+    country1 = fields.Many2one('res.country', string='Country')
     state = fields.Selection([('draft', 'Start'),
                               ('process', 'Process'),
                               ('done', 'Done',),
@@ -41,6 +41,7 @@ class Services(models.Model):
                              default='draft', string="Status", required='true', )
 
     cancel_reason = fields.Char(string='Reason for Cancellation')
+    services_seq = fields.Char(required=True, readonly=True, default=lambda self: _('New'))
 
     # def _compute_payment(self):
     #     for rec in self:
@@ -50,6 +51,9 @@ class Services(models.Model):
     #             rec.payment = "30000"
     #         else:
     #             rec.payment = 0
+    # def action_done(self):
+    #     for rec in self:
+    #         rec.state = "done"
 
     def action_view_payment(self):
         print()
@@ -59,18 +63,9 @@ class Services(models.Model):
 
     def test_done(self):
         print("<<<<<<<<<<<<<<<<<<Button Search>>>>>>>>>>>>>>>>>>>")
-        for a in self:
-            services_obj = self.env['services.fleet']
-            print(":::::::::::: services_obj::::::::::::::", services_obj)
-            services_obj.create({
-                'name_id': self.name_id,
-                'category': self.category,
-                'payment': self.payment,
-                'active': self.active,
-                'rc_book_number': self.rc_book_number,
-                'state': 'done'
-            })
-            a.state = "done"
+        for rec in self:
+            rec.state = "done"
+        return True
 
     # ::::::::::::::::::::form view open Code ::::::::::::::
 
@@ -114,7 +109,7 @@ class Services(models.Model):
     def action_delete(self):
         # for a in self:
         #     ctx=self._context
-        self.write({'customer_ids': [(5, 2, False)]})
+        self.write({'customer_id': [(5, 2, False)]})
         print("Button Click !!!!!!!!!!!!!>>>>>>>::::>button delete:::::>>>>>>>>>>>>>>>>", )
 
     # @api.model
@@ -148,17 +143,55 @@ class Services(models.Model):
             else:
                 rec.payment = 0
 
-    per_month = fields.Float(string="per month payment", compute="_compute_payamet_par_month", default=0.0)
+    per_month = fields.Float(string="per month payment", compute="_compute_payment_par_month", default=0.0)
 
     installment = fields.Selection(
         [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'),
          ('6', '6')], default="1", string='Installment')
 
     @api.depends("installment", "per_month")
-    def _compute_payamet_par_month(self):
+    def _compute_payment_par_month(self):
         for record in self:
             if record.installment != 0:
                 record.per_month = record.payment / int(record.installment)
             else:
                 record.per_month = 0
                 print(record.per_month)
+
+    @api.constrains('book_date')
+    def _check_date(self):
+        for rec in self:
+            if rec.book_date and rec.book_date < fields.Date.today():
+                raise ValidationError(_("this book not pas Date "))
+
+    @api.model
+    def create(self, vals):
+        vals['services_seq'] = self.env['ir.sequence'].next_by_code('services.fleet') or _('New')
+        res = super(Services, self).create(vals)
+        return res
+
+    # def action_send_mail(self):
+    #     print("sending mail")
+    #     template_id = self.env.ref('fleet_management.Services_email_template').id
+    #     print("template_id55848",template_id)
+    #     template = self.env['mail.template'].browse(template_id)
+    #     print("template::::::::",template)
+    #     template.send_mail(self.id, force_send=True)
+    #     return True
+
+    def action_send_mail(self):
+        template = self.env.ref('fleet_management.services_email_template')
+        # print("---------------------------------------------------------",template)
+        for rec in self:
+            if not rec.customer_id.email:
+                raise UserError(_("Cannot send email: %s has no email address.", rec.customer_id.name_id.name))
+                if rec.customer_id.email:
+                    email_values = {
+                        'email_cc': False,
+                        'auto_delete': False,
+                        'recipient_ids': [],
+                        'partner_ids': [],
+                        'scheduled_date': False,
+                    }
+                template.send_mail(rec.id, force_send=True, email_values=email_values)
+                return email_values

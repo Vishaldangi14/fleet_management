@@ -4,7 +4,7 @@ from datetime import date
 
 class Vehicle(models.Model):
     _name = 'vehicle.fleet'
-    _description = 'vehicle details'
+    _description = 'Vehicles'
     _rec_name = 'model_name'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
@@ -22,7 +22,7 @@ class Vehicle(models.Model):
     power = fields.Integer(string="Power")
     horsepower = fields.Integer(string="Horsepower")
     horsepower_tax = fields.Float(string="Horsepower Tax")
-    vendors = fields.Char(string="Vendors")
+    vendors = fields.Many2one('res.partner',string="Vendors")
     transmission = fields.Selection([('manual', 'Manual'), ('automatic', 'Automatic')], string="Transmission")
 
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):

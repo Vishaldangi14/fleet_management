@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record model="ir.module.category" id="module_category_fleet_management">
-        <field name="name">Fleet Management</field>
+        <field name="name">Fleet Manager</field>
         <field name="description">category For Fleet Management</field>
     </record>
 
-    <record id="group_fleetmanagement_staff" model="res.groups">
-        <field name="name">staff</field>
+    <record id="group_fleetmanagement_service" model="res.groups">
+        <field name="name">service</field>
         <field name="category_id" ref="module_category_fleet_management"/>
     </record>
 
-    <record id="group_fleetmanagement_customer" model="res.groups">
-        <field name="name">customer</field>
+    <record id="group_fleetmanagement_user" model="res.groups">
+        <field name="name">user</field>
         <field name="category_id" ref="module_category_fleet_management"/>
     </record>
 
-    <record id="group_fleetmanagement_manager" model="res.groups">
-        <field name="name">Manager</field>
+    <record id="group_fleetmanagement_manager_Fleet_Manage" model="res.groups">
+        <field name="name">Fleet Manager</field>
         <field name="category_id" ref="module_category_fleet_management"/>
-        <!-- <field name="implied_ids" eval="[(4, ref('group_school_student'))]"/> -->
-    </record>
-    <record id="ir_rule_mail_notifications_group_user_1" model="ir.rule">
-        <field name="name">Customer Only</field>
-        <field name="model_id" ref="group_fleetmanagement_customer"/>
-        <field name="groups" eval="[Command.link(ref('fleet_management.group_fleetmanagement_customer'))]"/>
-        <field name="domain_force">[('name_id', '=', user.partner_id.id)]</field>
     </record>
 
+
+    <!--    Rules -->
+
+    <record id="service_fleet_rules" model="ir.rule">
+        <field name="name">service records</field>
+        <field name="model_id" ref="fleet_management.model_services_fleet"/>
+        <field name="domain_force">[('payment','in',[30000,70000])]</field>
+        <field name="groups" eval="[(4, ref('fleet_management.group_fleetmanagement_manager_Fleet_Manage'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
 </odoo>
+
+
+
+

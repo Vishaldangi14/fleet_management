@@ -2,19 +2,32 @@
 
     <!-- tree view -->
 
+    <record id="action_mark_as_done" model="ir.actions.server">
+        <field name="name">Mark As Done</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_services_fleet"/>
+        <field name="binding_model_id" ref="model_services_fleet"/>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                if record.state =='draft':
+                    record.test_done()
+        </field>
+    </record>
+
     <record id="services_view_tree" model="ir.ui.view">
         <field name="name">services.view.tree</field>
         <field name="model">services.fleet</field>
         <field name="arch" type="xml">
             <tree decoration-danger="state == 'cancelled'">
+                <field name="customer_id"/>
                 <field name="name_id"/>
                 <field name="vehicle_number"/>
-                <field name="vehicle_model"/>
                 <field name="active" widget="boolean_toggle"/>
                 <field name="category"/>
                 <field name="customer_contact"/>
-                <field name="customer_complaint"/>
-                <field name="rc_book_number"/>
+                <field name="book_date"/>
+                <field name="payment"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -28,11 +41,12 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="test_done" type="object" state="closed" string="Done"/>
+                    <button name="test_done" type="object" state="closed" string="Done" attrs="{'invisible':[('state','=','done')]}" class= 'oe_highlight'/>
                     <button name="%(fleet_management.action_view_fleet_cancel)d" string="Cancel"
-                            type="action" state="cancelled" attrs="{'invisible':[('state','=','cancelled')]}"/>
+                            type="action" state="cancelled" attrs="{'invisible':[('state','=','cancelled')]}" class= 'oe_highlight'/>
                     <field name="state" widget="statusbar" nolabel="1" options="{'clickable': '1'}"/>
-                    <button name="action_delete" type="object" state="closed" string="Delete"/>
+                    <button name="action_delete" type="object" state="closed" string="Delete" />
+                    <button name="action_send_mail" type="object" state="closed" string="Send Mail" class='oe_highlight' icon='fa-envelope'/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -42,15 +56,20 @@
                                 <span class="o_stat_text">payment</span>
                             </div>
                         </button>
+
                         <button name="action_view_services" type="object" class="oe_stat_button" icon="fa-users">
                             <div class="o_field_widget o_stat_info">
-                                <!--                                <field name="category"/>-->
                                 <span class="o_stat_text">services</span>
                                 <span class="o_stat_text">Preview</span>
                             </div>
                         </button>
                     </div>
                     <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="services_seq" readonly="1"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
                             <field name="name_id" required="1" attrs="{'readonly':[('state','=' ,'done')]}"/>
@@ -63,7 +82,7 @@
                             <field name="engine_number" attrs="{'readonly':[('state','=' ,'done')]}"/>
                         </group>
                         <group>
-                            <field name="customer_ids" attrs="{'readonly':[('state','=' ,'done')]}"/>
+                            <field name="customer_id" attrs="{'readonly':[('state','=' ,'done')]}"/>
                             <field name="customer_contact"/>
                             <!--                            <field name="customer_contact" groups="fleet_management.group_fleetmanagement_staff,fleet_management.group_fleetmanagement_manager"/>-->
                             <field name="payment"/>
@@ -85,11 +104,8 @@
                                         <b>Pickup Location</b>
                                     </span>
                                     <div class="o_address_format">
-                                        <field name="street" placeholder="Street..." class="o_address_street"/>
-                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
                                         <field name="city" placeholder="City" class="o_address_city"/>
                                         <field name="states" placeholder="State" class="o_address_city"/>
-                                        <field name="zip" placeholder="ZIP" class="o_address_city"/>
                                         <field name="country" placeholder="Country" class="o_address_country"/>
                                     </div>
                                 </group>
@@ -99,15 +115,12 @@
                             <group>
                                 <group>
                                     <span class="o_form_label o_td_label" name="address_name">
-                                        <b>Dropoff Location</b>
+                                        <b>Drop Location</b>
                                     </span>
-                                    <div class="o_address_format">
-                                        <field name="street" placeholder="Street..." class="o_address_street"/>
-                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
-                                        <field name="city" placeholder="City" class="o_address_city"/>
-                                        <field name="states" placeholder="State" class="o_address_city"/>
-                                        <field name="zip" placeholder="ZIP" class="o_address_city"/>
-                                        <field name="country" placeholder="Country" class="o_address_country"/>
+                                    <div>
+                                        <field name="city1" placeholder="City" class="o_address_city"/>
+                                        <field name="states1" placeholder="State" class="o_address_city"/>
+                                        <field name="country1" placeholder="Country" class="o_address_country"/>
                                     </div>
                                 </group>
                             </group>
@@ -148,7 +161,7 @@
             <kanban>
                 <field name="id"/>
                 <field name="name_id"/>
-                <field name="customer_ids"/>
+                <field name="customer_id"/>
                 <field name="vehicle_number"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -166,7 +179,7 @@
                                 <div class="o_kanban_tags_section">
                                     <ul>
                                         <li>Customer Id:
-                                            <field name="customer_ids"/>
+                                            <field name="customer_id"/>
                                         </li>
                                         <li>Vehicle Number:
                                             <field name="vehicle_number"/>
@@ -193,6 +206,20 @@
         </field>
     </record>
 
+<!--    view_pivot-->
+
+
+     <record id="services_view_pivot" model="ir.ui.view">
+        <field name="name">services.view.pivot</field>
+        <field name="model">services.fleet</field>
+        <field name="arch" type="xml">
+            <pivot string="Services">
+                <field name="customer_id" type="row"></field>
+                <field name="name_id" type="col"></field>
+            </pivot>
+        </field>
+    </record>
+
     <!--    !calendar view-->
 
     <record id="services_view_calendar" model="ir.ui.view">
@@ -213,21 +240,21 @@
         <field name="name">Services Details</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">services.fleet</field>
-        <field name="view_mode">tree,form,graph,kanban,calendar</field>
+        <field name="view_mode">tree,form,graph,kanban,calendar,pivot</field>
     </record>
 
     <menuitem
             id="menu_services"
             name="Services"
             sequence="1"
-            action="action_services_details"
             parent="Fleet_Management_menu_root"/>
 
     <menuitem
-            id="menu_fleet"
+            id="menu_service"
             name="Services"
-            sequence="-1"
+            sequence="1"
             action="action_services_details"
+            groups="fleet_management.group_fleetmanagement_user"
             parent="menu_services"/>
 
 

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="report_services" model="ir.actions.report">
+        <field name="name">Services Card</field>
+        <field name="model">services.fleet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fleet_management.report_services_card</field>
+        <field name="report_file">fleet_management.report_services_card</field>
+        <field name="binding_model_id" ref="model_services_fleet"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_services_card">
+        <t t-call="web.html_container"/>
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <center>
+                    <h1>
+                        <strong>
+                            <span t-field="docs.services_seq"/>
+                        </strong>
+                    </h1>
+                </center>
+                <div class="row">
+                    <div class="col-6" style="float:left;">
+                        <h5>
+                            <b>Customer Name:</b>
+                            <t t-esc="o.customer_id.name_id.name"/>
+                        </h5>
+                        <h5>
+                            <b>Phone Number:</b>
+                            <t t-esc="o.customer_contact"/>
+                        </h5>
+                        <h5>
+                            <b>Car name:</b>
+                            <t t-esc="o.name_id.model_name"/>
+                        </h5>
+
+                        <div>
+                            <h2>
+                                <b>
+                                    <u>Car Information</u>
+                                </b>
+                            </h2>
+                        </div>
+
+                        <h5>
+                            <b>Chassis number:</b>
+                            <t t-esc="o.chassis_number"/>
+                        </h5>
+                        <h5>
+                            <b>Engine number:</b>
+                            <t t-esc="o.engine_number"/>
+                        </h5>
+                        <h5>
+                            <b> Rc book number:</b>
+                            <t t-esc="o.rc_book_number"/>
+                        </h5>
+                    </div>
+                    <div class="col-6">
+                        <div t-field="o.image"
+                             style="padding: 0px; margin: 0px; max-width: 200px; max-height: 12px; margin-left; float:right;"
+                             t-options="{'widget':'image',}"/>
+                        <!--                             t-options="{'widget':'image','class': 'rounded-circle','max-width': '10','img_style':'width:30px;height:30px'}"/>-->
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-secondary o_main_table">
+                    <thead style="background-color:blue">
+                        <tr>
+                            <th name="th_category" class="text-left">Category</th>
+                            <th name="th_Amount" class="text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <thead style="background-color:white">
+                                <td name="td_name_id" class="text-left">
+                                    <span t-field="docs.category"/>
+                                </td>
+                                <td name="td_name_id" class="text-right">
+                                    <span t-field="docs.payment"/>
+                                </td>
+                            </thead>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered table-secondary o_main_table">
+                    <thead style="background-color:blue">
+                        <tr>
+                            <th name="th_pickup_location" class="text-left">pickup location</th>
+                            <th name="th_Amount" class="text-right">drop location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td name="td_pickup_location" class="text-left">
+                                <span t-field="docs.city"/>
+                            </td>
+                            <td name="td_dropoff_location" class="text-right">
+                                <span t-field="docs.city1"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span t-field="docs.states"/>
+                            </td>
+                            <td name="td_dropoff_location" class="text-right">
+                                <span t-field="docs.states1"/>
+                            </td>
+<!--                            <tr>-->
+<!--                                <td name="td_pickup_location" class="text-left">-->
+<!--                                    <span t-field="docs.country"/>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+    </template>
+</odoo>

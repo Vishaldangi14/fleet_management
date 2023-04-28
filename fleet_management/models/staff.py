@@ -22,13 +22,6 @@ class Staff(models.Model):
     states = fields.Char(string='State')
     zip = fields.Char(string='Zip')
     country = fields.Char(string='Country')
-    # customer_seq = fields.Char(string='Order Reference', required=True, readonly=True, default=lambda self: _('New'))
-
-    # state = fields.Selection([
-    #     ('draft', 'In admission'),
-    #     ('done', 'Done'),
-    #     ('terminate', 'Terminate'),
-    #     ('alumni', 'Alumni')], string='status', default='done')
 
     def _compute_age(self):
         for rec in self:

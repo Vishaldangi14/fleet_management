@@ -1,11 +1,19 @@
 <odoo>
     <data>
         <record id="customer_seq_code" model="ir.sequence">
-			<field name="name">Customer Code</field>
-			<field name="code">customer.fleet</field>
-			<field name="prefix">Customer</field>
-			<field name="padding">1</field>
-			 <field name="company_id" eval='False'/>
-		</record>
+            <field name="name">Customer Code</field>
+            <field name="code">customer.fleet</field>
+            <field name="prefix">Services</field>
+            <field name="padding">1</field>
+            <field name="company_id" eval='False'/>
+        </record>
+        <record id="services_seq_code" model="ir.sequence">
+            <field name="name">Services Code</field>
+            <field name="code">services.fleet</field>
+            <field name="prefix">SRV00</field>
+            <field name="padding">1</field>
+            <field name="company_id" eval='False'/>
+        </record>
+
     </data>
 </odoo>

@@ -87,9 +87,10 @@
 
     <menuitem
             id="menu_fleet"
-            name="Vehicle"
+            name="Vehicles"
             sequence="-1"
             action="action_vehicle_details"
+            groups="fleet_management.group_fleetmanagement_manager_Fleet_Manage"
             parent="menu_vehicle"/>
 
 

@@ -9,8 +9,7 @@ class Customer(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name_id = fields.Many2one('res.partner', string='Customer Name')
-
-    company = fields.Many2one('vehicle.fleet', string="Car Brand")
+    company = fields.Many2one('vehicle.fleet', string="Company Name")
     car_name = fields.Char(string="Car Brand")
     age = fields.Integer(string='Age', compute="_compute_age")
     email = fields.Char(string='Email')
@@ -26,10 +25,6 @@ class Customer(models.Model):
     country = fields.Char(string='Country')
     length_visibility = fields.Boolean("visibility", compute="compute_field_visibility", default=False, store=True)
     customer_seq = fields.Char(required=True, readonly=True, default=lambda self: _('New'))
-
-    # customers = fields.Integer(string="customer", compute='_compute_customer',stored=False)
-
-    # service_id = fields.Many2one("services.fleet",string="Car Details") name get
 
     def test_recordset(self):
         for rec in self:
@@ -142,14 +137,6 @@ class Customer(models.Model):
 
     # -----------ir.squence-----------
 
-    @api.model
-    def create(self, vals):
-        # if not vals.get('note'):
-        #     vals['note'] = 'new customer'
-        vals['customer_seq'] = self.env['ir.sequence'].next_by_code('customer.fleet') or _('New')
-        res = super(Customer, self).create(vals)
-        return res
-
     # def sale_order(self):
     #     return {
     #         'type': 'ir.actions.act_window',
@@ -175,4 +162,31 @@ class Customer(models.Model):
     def _onchange_email_mobile(self):
         if self.name_id:
             self.email = self.name_id.email
-            # self.mobile = self.name_id.mobile
+            self.mobile = self.name_id.mobile
+
+    customer_service = fields.Integer(compute='compute_count_services')
+
+    def compute_count_services(self):
+        for rec in self:
+            rec.customer_service = self.env['services.fleet'].search_count(
+                [('customer_id', '=', self.id)])
+
+    def action_view_services(self):
+        self.ensure_one()
+        print("self.id", self.id)
+        rec = {
+            'type': 'ir.actions.act_window',
+            'name': 'service fleet',
+            'res_model': 'services.fleet',
+            'view_mode': 'tree,form',
+            'domain': [('customer_id', '=', self.id)],
+            'context': dict(self._context, create=False)
+
+        }
+        return rec
+
+    @api.model
+    def create(self, vals):
+        vals['customer_seq'] = self.env['ir.sequence'].next_by_code('customer.fleet') or _('New')
+        res = super(Customer, self).create(vals)
+        return res
