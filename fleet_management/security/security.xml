@@ -27,6 +27,7 @@
         <field name="name">service records</field>
         <field name="model_id" ref="fleet_management.model_services_fleet"/>
         <field name="domain_force">[('payment','in',[30000,70000])]</field>
+
         <field name="groups" eval="[(4, ref('fleet_management.group_fleetmanagement_manager_Fleet_Manage'))]"/>
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>

@@ -1,6 +1,6 @@
 from odoo import fields, api, models, _
 from datetime import date
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class Services(models.Model):
@@ -57,9 +57,6 @@ class Services(models.Model):
 
     def action_view_payment(self):
         print()
-
-        #:::::::::::::: many2 one use hoga
-        #
 
     def test_done(self):
         print("<<<<<<<<<<<<<<<<<<Button Search>>>>>>>>>>>>>>>>>>>")
@@ -170,28 +167,27 @@ class Services(models.Model):
         res = super(Services, self).create(vals)
         return res
 
-    # def action_send_mail(self):
-    #     print("sending mail")
-    #     template_id = self.env.ref('fleet_management.Services_email_template').id
-    #     print("template_id55848",template_id)
-    #     template = self.env['mail.template'].browse(template_id)
-    #     print("template::::::::",template)
-    #     template.send_mail(self.id, force_send=True)
-    #     return True
+    @api.model
+    def fields_view_get(self, view_id=None, view_type=('form' and 'tree'), toolbar=False, submenu=False):
+        res = super(Services, self).fields_view_get(
+            view_id=view_id,
+            view_type=view_type,
+            toolbar=toolbar,
+            submenu=submenu)
+        print("<<<<<<<<<<<<<<<Res>>>>", res)
+        if view_type == 'form' or view_type == 'tree' and toolbar and self.user_has_groups(
+                'fleet_management.group_fleetmanagement_user'):
+            # if view_type == ('form' and 'tree') and toolbar:
+            res.pop("toolbar", toolbar)
+        print("\n\n\n\n\n               res", res)
+        return res
 
-    def action_send_mail(self):
+    def cron_mail_weekly_remainder(self):
         template = self.env.ref('fleet_management.services_email_template')
-        # print("---------------------------------------------------------",template)
+        services = self.search([('state', '=', 'done')])
         for rec in self:
             if not rec.customer_id.email:
                 raise UserError(_("Cannot send email: %s has no email address.", rec.customer_id.name_id.name))
-                if rec.customer_id.email:
-                    email_values = {
-                        'email_cc': False,
-                        'auto_delete': False,
-                        'recipient_ids': [],
-                        'partner_ids': [],
-                        'scheduled_date': False,
-                    }
-                template.send_mail(rec.id, force_send=True, email_values=email_values)
-                return email_values
+        for i in services:
+            if i.state == "done":
+                template.send_mail(i.id, force_send=True)

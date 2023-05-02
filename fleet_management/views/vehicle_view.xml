@@ -82,7 +82,7 @@
     <menuitem
             id="menu_vehicle"
             name="Configuration"
-            sequence="1"
+            sequence="4"
             parent="Fleet_Management_menu_root"/>
 
     <menuitem

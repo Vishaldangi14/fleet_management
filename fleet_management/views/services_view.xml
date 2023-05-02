@@ -28,7 +28,7 @@
                 <field name="customer_contact"/>
                 <field name="book_date"/>
                 <field name="payment"/>
-                <field name="state"/>
+                <field name="state" class='oe_highlight'/>
             </tree>
         </field>
     </record>
@@ -41,12 +41,15 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="test_done" type="object" state="closed" string="Done" attrs="{'invisible':[('state','=','done')]}" class= 'oe_highlight'/>
+                    <button name="test_done" type="object" state="closed" string="Done"
+                            attrs="{'invisible':[('state','=','done')]}" class='oe_highlight'/>
                     <button name="%(fleet_management.action_view_fleet_cancel)d" string="Cancel"
-                            type="action" state="cancelled" attrs="{'invisible':[('state','=','cancelled')]}" class= 'oe_highlight'/>
+                            type="action" state="cancelled" attrs="{'invisible':[('state','=','cancelled')]}"
+                            class='oe_highlight'/>
                     <field name="state" widget="statusbar" nolabel="1" options="{'clickable': '1'}"/>
-                    <button name="action_delete" type="object" state="closed" string="Delete" />
-                    <button name="action_send_mail" type="object" state="closed" string="Send Mail" class='oe_highlight' icon='fa-envelope'/>
+                    <button name="action_delete" type="object" state="closed" string="Delete"/>
+                    <button name="cron_mail_weekly_remainder" type="object" state="closed" string="Send Mail"
+                            class='oe_highlight' icon='fa-envelope'/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -206,18 +209,17 @@
         </field>
     </record>
 
-<!--    view_pivot-->
+<!--    gantt-->
 
-
-     <record id="services_view_pivot" model="ir.ui.view">
-        <field name="name">services.view.pivot</field>
-        <field name="model">services.fleet</field>
-        <field name="arch" type="xml">
-            <pivot string="Services">
-                <field name="customer_id" type="row"></field>
-                <field name="name_id" type="col"></field>
-            </pivot>
-        </field>
+    <record id="services_view_view_gantt" model="ir.ui.view">
+    <field name="name">services.view.gantt</field>
+    <field name="model">services.fleet</field>
+    <field name="arch" type="xml">
+        <gantt date_start="book_date"
+               date_stop="submit_date"
+               default_group_by='customer_id'>
+        </gantt>
+    </field>
     </record>
 
     <!--    !calendar view-->
@@ -240,13 +242,13 @@
         <field name="name">Services Details</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">services.fleet</field>
-        <field name="view_mode">tree,form,graph,kanban,calendar,pivot</field>
+        <field name="view_mode">tree,form,graph,kanban,calendar,pivot,gantt</field>
     </record>
 
     <menuitem
             id="menu_services"
             name="Services"
-            sequence="1"
+            sequence="2"
             parent="Fleet_Management_menu_root"/>
 
     <menuitem
@@ -256,6 +258,9 @@
             action="action_services_details"
             groups="fleet_management.group_fleetmanagement_user"
             parent="menu_services"/>
+    <!--    <record id="fleet_management.report_services" model="ir.actions.report">-->
+    <!--        <field name="binding_model_id" eval="False"/>-->
+    <!--    </record>-->
 
 
 </odoo>

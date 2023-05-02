@@ -1,8 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 fleet_management.access_staff_fleet,access_staff_fleet,fleet_management.model_staff_fleet,base.group_user,1,1,1,1
 fleet_management.access_customer_fleet,access_customer_fleet,fleet_management.model_customer_fleet,base.group_user,1,1,1,1
-fleet_management.access_services_fleet,access_services_fleet,fleet_management.model_services_fleet,base.group_user,1,1,1,1
+fleet_management.access_services_fleet_service,access_services_fleet_service,fleet_management.model_services_fleet,fleet_management.group_fleetmanagement_service,1,1,1,1
+fleet_management.access_services_fleet_user,access_services_fleet_user,fleet_management.model_services_fleet,fleet_management.group_fleetmanagement_user,1,0,0,0
+fleet_management.access_services_fleet_fm,access_services_fleet_fm,fleet_management.model_services_fleet,fleet_management.group_fleetmanagement_manager_Fleet_Manage,1,1,1,1
 fleet_management.access_vehicle_fleet,access_vehicle_fleet,fleet_management.model_vehicle_fleet,base.group_user,1,1,1,1
 fleet_management.access_fleet_cancel_wiz,access_fleet_cancel_wiz,fleet_management.model_fleet_cancel_wiz,base.group_user,1,1,1,1
-fleet_management.access_services_report_fleet,access_services_report_fleet,fleet_management.model_services_report_fleet,base.group_user,1,1,,1
+
+
 

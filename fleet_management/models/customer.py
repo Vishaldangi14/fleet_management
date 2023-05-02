@@ -20,9 +20,9 @@ class Customer(models.Model):
     street = fields.Char(string='Street')
     street2 = fields.Char(string='Street2')
     city = fields.Char(string='City')
-    states = fields.Char(string='State')
     zip = fields.Char(string='Zip')
-    country = fields.Char(string='Country')
+    country = fields.Many2one('res.country',string='Country')
+    states = fields.Many2one('res.country.state', string='State')
     length_visibility = fields.Boolean("visibility", compute="compute_field_visibility", default=False, store=True)
     customer_seq = fields.Char(required=True, readonly=True, default=lambda self: _('New'))
 

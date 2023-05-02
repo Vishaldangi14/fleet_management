@@ -53,21 +53,24 @@
                     </div>
                     <field name="image" widget="image" class="oe_avatar"/>
                     <group>
+<!--                        <group>-->
+<!--                            <field name="name_id" required="1" string="CUSTOMER" options='{"always_reload": True}'/>-->
+
+<!--                            <field name="length_visibility" groups="fleet_management.group_fleetmanagement_customer"-->
+<!--                                   visible='1'/>-->
+<!--                            <field name="length_visibility" invisible='1'-->
+<!--                                   attrs="{'invisible': [('length_visibility', '=', True)]}"/>-->
+
+<!--                        </group>-->
                         <group>
-                            <field name="name_id" required="1" string="CUSTOMER" options='{"always_reload": True}'/>
-                            <field name="mobile" widget='phone'/>
-                            <field name="length_visibility" groups="fleet_management.group_fleetmanagement_customer"
-                                   visible='1'/>
-                            <field name="length_visibility" invisible='1'
-                                   attrs="{'invisible': [('length_visibility', '=', True)]}"/>
-                            <field name="birthdate"/>
-                        </group>
-                        <group>
+                            <field name="name_id"/>
                             <field name="age"/>
                             <field name="gender"/>
                             <field name="email"/>
+                            <field name="birthdate"/>
                             <field name="customer_seq"/>
                             <field name="company"/>
+                            <field name="mobile" widget='phone'/>
                             <!--                            <field name="service_id"/>-->
                         </group>
                     </group>
@@ -189,6 +192,7 @@
     <menuitem
             id="menu_profile"
             name="Fleet"
+            sequence="1"
             groups="fleet_management.group_fleetmanagement_manager_Fleet_Manage"
             parent="Fleet_Management_menu_root"/>
 
