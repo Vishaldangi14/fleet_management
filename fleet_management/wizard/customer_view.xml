@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_customer_1" model="ir.ui.view">
+        <field name="name">Download.form</field>
+        <field name="model">customer.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Download Reason">
+                <group>
+                    <h3>Export Complete</h3>
+                </group>
+                <button name="action_report_customer_link" string=" " type="object"
+                            data-hotkey="q" icon="fa-cloud-download"/>
+                <footer>
+                    <button name="action_report_customer_card_xls" string="Print" type="object" class="btn-primary"
+                            data-hotkey="q"/>
+                    <button string="Export" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_customer_download" model="ir.actions.act_window">
+        <field name="name">Download</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">customer.wiz</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_customer_fleet"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

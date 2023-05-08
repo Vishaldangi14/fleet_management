@@ -16,7 +16,7 @@ class ResPartner(models.Model):
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
         # domain  '|' evaluation
-        x = self.search(['|',('mobile', operator, name),'|',('category_id', operator, name,),('team_id', operator, name,),])
+        x = self.search(['|',('mobile', operator, name),('category_id', operator, name,),])
         return self.browse(x.ids).name_get()
 
 

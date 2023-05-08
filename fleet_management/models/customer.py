@@ -21,7 +21,7 @@ class Customer(models.Model):
     street2 = fields.Char(string='Street2')
     city = fields.Char(string='City')
     zip = fields.Char(string='Zip')
-    country = fields.Many2one('res.country',string='Country')
+    country = fields.Many2one('res.country', string='Country')
     states = fields.Many2one('res.country.state', string='State')
     length_visibility = fields.Boolean("visibility", compute="compute_field_visibility", default=False, store=True)
     customer_seq = fields.Char(required=True, readonly=True, default=lambda self: _('New'))
@@ -169,7 +169,10 @@ class Customer(models.Model):
     def compute_count_services(self):
         for rec in self:
             rec.customer_service = self.env['services.fleet'].search_count(
-                [('customer_id', '=', self.id)])
+                [('customer_id', 'in', rec.ids)])
+        # print("<<<<<<<<>>>rec>>>>>>>>>>>>", rec)
+        # print("//////////////////rec.customer_service", rec.customer_service)
+        # print("self////////////////////////", self.ids)
 
     def action_view_services(self):
         self.ensure_one()

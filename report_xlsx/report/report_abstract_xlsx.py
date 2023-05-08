@@ -99,7 +99,10 @@ class ReportXlsxAbstract(models.AbstractModel):
         return f"{f'{s_before}'}#,##0.{'0' * currency.decimal_places}{f'{s_after}'}"
 
     def create_xlsx_report(self, docids, data):
+        print("d0cids",docids,)
+        print("data", data)
         objs = self._get_objs_for_report(docids, data)
+        print("\n\n\nobjs",objs)
         file_data = BytesIO()
         workbook = xlsxwriter.Workbook(file_data, self.get_workbook_options())
         self.generate_xlsx_report(workbook, data, objs)

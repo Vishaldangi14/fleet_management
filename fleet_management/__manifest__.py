@@ -13,6 +13,7 @@
         'report/report.xml',
         'report/services_report.xml',
         'wizard/cancel_view.xml',
+        'wizard/customer_view.xml',
         'data/data.xml',
         'data/mail_template.xml',
         'data/mail_template_services.xml',
