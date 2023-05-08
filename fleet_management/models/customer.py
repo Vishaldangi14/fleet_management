@@ -150,7 +150,7 @@ class Customer(models.Model):
         self.ensure_one()
         rec = {
             'type': 'ir.actions.act_window',
-            'name': 'Sale Order',
+            'name': 'Customer Fleet',
             'res_model': 'sale.order',
             'view_mode': 'tree,form',
             'domain': [('partner_id', '=', self.name_id.id)],
