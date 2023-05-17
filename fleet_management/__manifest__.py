@@ -6,7 +6,7 @@
     'website': '',
     'summary': 'Fleet Management',
     'description': """Fleet 1""",
-    'depends': ['base', 'mail', 'report_xlsx'],
+    'depends': ['base', 'mail', 'report_xlsx', 'sale', 'stock'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
@@ -22,7 +22,9 @@
         'views/customer_view.xml',
         'views/services_view.xml',
         'views/vehicle_view.xml',
-
+        'views/sale_order_view.xml',
+        'views/stock_picking_view.xml',
+        'report/sale_report_inherit.xml'
 
     ],
 

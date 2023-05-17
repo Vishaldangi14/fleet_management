@@ -24,7 +24,7 @@
                     <div class="col-6" style="float:left;">
                         <h5>
                             <b>Customer Name:</b>
-                            <t t-esc="o.customer_id.name_id.name"/>
+                            <t t-esc="o.customer_id.partner_id.name"/>
                         </h5>
                         <h5>
                             <b>Phone Number:</b>
@@ -32,7 +32,7 @@
                         </h5>
                         <h5>
                             <b>Car name:</b>
-                            <t t-esc="o.name_id.model_name"/>
+                            <t t-esc="o.vehicle_id.name"/>
                         </h5>
 
                         <div>
@@ -74,10 +74,10 @@
                     <tbody>
                         <tr>
                             <thead style="background-color:white">
-                                <td name="td_name_id" class="text-left">
+                                <td name="td_partner_id" class="text-left">
                                     <span t-field="docs.category"/>
                                 </td>
-                                <td name="td_name_id" class="text-right">
+                                <td name="td_partner_id" class="text-right">
                                     <span t-field="docs.payment"/>
                                 </td>
                             </thead>

@@ -5,7 +5,7 @@
             <field name="model_id" ref="fleet_management.model_customer_fleet"/>
             <field name="email_from">{{ user.email_formatted }}</field>
             <field name="email_to">{{ object.email }}</field>
-            <field name="subject">customer card ( {{ object.name_id.name }})</field>
+            <field name="subject">customer card ( {{ object.partner_id.name }})</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
@@ -19,7 +19,7 @@
                         <br/>
                         <br/>
 
-                        Name: ${object.name_id}
+                        Name: ${object.vehicle_id}
                         <br/>
                         customer name: ${object.company}
                         <br/>
@@ -32,7 +32,7 @@
                 </div>
             </field>
             <field name="report_template" ref="report_customer_name"/>
-<!--            <field name="report_name">customer card_${(object.name_id)}</field>-->
+<!--            <field name="report_name">customer card_${(object.vehicle_id)}</field>-->
         </record>
     </data>
 </odoo>

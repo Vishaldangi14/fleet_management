@@ -1,5 +1,6 @@
 from odoo import fields, api, models, _
 from datetime import date
+from odoo.exceptions import UserError, ValidationError
 
 
 class Staff(models.Model):
@@ -8,7 +9,7 @@ class Staff(models.Model):
     _name_name = 'name'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string='Employee Name')
+    name = fields.Many2one('customer.fleet', string='Employee Name')
     age = fields.Integer(string='Age', compute="_compute_age")
     email = fields.Char(string='Email')
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string='Gender')
@@ -30,6 +31,13 @@ class Staff(models.Model):
                 rec.age = today.year - rec.birthdate.year
             else:
                 rec.age = 0
+
+    # @api.model(birthdate)
+    # def _contains(self):
+    #     for rec in self:
+    #         today = date.today()
+    #     if rec.birthdate < today:
+    #         raise ValidationError("sdfghjkjhgfghj")
 
     # @api.onchange('name')
     # def _onchange_contact(self):
@@ -97,5 +105,3 @@ class Staff(models.Model):
     #         vals['customer_seq'] = self.env['ir.sequence'].next_by_code('staff.fleet') or _('New')
     #         res = super(Staff, self).create(vals)
     #         return res
-
-

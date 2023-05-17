@@ -6,11 +6,12 @@ from odoo.exceptions import UserError, ValidationError
 class Services(models.Model):
     _name = 'services.fleet'
     _description = 'Services details'
-    _rec_name = 'name_id'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _rec_name = 'vehicle_id'
+    _inherit = ['mail.thread', 'mail.activity.mixin', ]
 
-    name_id = fields.Many2one('vehicle.fleet', string="Car Name")
+    vehicle_id = fields.Many2one('vehicle.fleet', string="Car Name")
     car_name = fields.Char(string="Cars Brand")
+    vehicle_ids = fields.One2many('vehicle.fleet', 'vendors', string="Vehicle_deatils")
     car_model = fields.Char(string="Vehicle Model")
     customer_id = fields.Many2one("customer.fleet", string="Customer Name")
     vehicle_model = fields.Char(string="Service Type")
@@ -93,28 +94,18 @@ class Services(models.Model):
         if self.category_count == 1:
             action = self.env['services.fleet'].search([('category', '=', 'contract')])
             records.update({
-                'view_mode': 'form',
+                'view_mode': 'tree,form',
                 'res_id': action.id,
             })
         print("records::::::::", records)
         return records
 
-    # def action_in_progress(self):
-    #     self.write({'customer_ids': [(0, 0, {'category': "contract",})]})
-    #     print("Button Click !!!!!!!!!!!!!")
-
-    def action_delete(self):
-        # for a in self:
-        #     ctx=self._context
-        self.write({'customer_id': [(5, 2, False)]})
-        print("Button Click !!!!!!!!!!!!!>>>>>>>::::>button delete:::::>>>>>>>>>>>>>>>>", )
-
     # @api.model
     # def name_get(self):
     #     result = []
     #     for rec in self:
-    #         name_id = rec.name_id
-    #         display_name = "Custom Display Name for {}".format(name_id)
+    #         vehicle_id = rec.vehicle_id
+    #         display_name = "Custom Display Name for {}".format(vehicle_id)
     #         result.append((rec.id, display_name))
     #     return result
 
@@ -123,7 +114,7 @@ class Services(models.Model):
         print("self", self)
         for rec in self:
             result.append((rec.id, '%s - %s %s %s' % (
-                rec.name_id.model_name, rec.vehicle_number or " ", rec.chassis_number or "-",
+                rec.vehicle_id.name, rec.vehicle_number or " ", rec.chassis_number or "-",
                 rec.engine_number or " ",)))
             print(":::::::::::::res====::::::::::::", rec.id, rec.vehicle_number, rec.chassis_number,
                   rec.engine_number)
@@ -187,7 +178,55 @@ class Services(models.Model):
         services = self.search([('state', '=', 'done')])
         for rec in self:
             if not rec.customer_id.email:
-                raise UserError(_("Cannot send email: %s has no email address.", rec.customer_id.name_id.name))
+                raise UserError(_("Cannot send email: %s has no email address.", rec.customer_id.partner_id.name))
         for i in services:
             if i.state == "done":
                 template.send_mail(i.id, force_send=True)
+
+    def create_sale(self):
+        product_id = self.env["product.product"].search([('detailed_type', '=', 'service')], limit=1, )
+        for rec in self:
+            vals = {
+                'partner_id': rec.customer_id.partner_id.id,
+                'service_id': rec.id,
+                'order_line': [(0, 0, {'product_id': product_id.id, 'name': 'services', 'price_unit': 30000})],
+
+            }
+            sale_id = self.env['sale.order'].create(vals)
+            self.state = 'done'
+            sale_id.action_confirm()
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Sale Order',
+                'res_model': 'sale.order',
+                'view_mode': 'form',
+                'res_id': sale_id.id,
+                'context': self.env.context
+            }
+
+    sale_order_count = fields.Integer(compute='compute_count_sales')
+
+    def compute_count_sales(self):
+        for rec in self:
+            rec.sale_order_count = self.env['sale.order'].search_count(
+                [('service_id', 'in', rec.ids)])
+
+    def compute_count_sale(self):
+        for rec in self:
+            rec = {
+                'type': 'ir.actions.act_window',
+                'name': 'Sale Order',
+                'res_model': 'sale.order',
+                'view_mode': 'tree,form',
+                'domain': [('service_id', 'in', rec.ids)],
+                'context': dict(self._context, create=False)
+            }
+        return rec
+
+    def action_in_progress(self):
+        self.write({'vehicle_ids': [(0, 0, {'color': "red", 'name': 'BMW X5'})]})
+        print("Button Click !!!!!!!!!!!!!")
+
+    def action_delete(self):
+        self.write({'vehicle_ids': [(5, 2, False)]})
+        print("Button Click !!!!!!!!!!!!!>>>>>>>>xyz>>>>>>>>>>>>>>>>", )

@@ -21,13 +21,13 @@ class ReportXls(models.AbstractModel):
         sheet.write(row, col + 5, 'BirthDate', bold)
         sheet.write(row, col + 6, 'mobile', bold)
         sheet.write(row, col + 7, 'City', bold)
-        sheet.write(row, col + 1, customers.name_id.name)
+        sheet.write(row, col + 1, customers.partner_id.name)
         # customers = self.env['customer.fleet'].search([])
         for s in customers:
             row = row + 1
             col = col
-            sheet.write(row, col, s.name_id.name)
-            sheet.write(row, col + 1, s.company.model_name)
+            sheet.write(row, col, s.partner_id.name)
+            sheet.write(row, col + 1, s.company.name)
             sheet.write(row, col + 2, s.age)
             sheet.write(row, col + 3, s.email)
             sheet.write(row, col + 4, s.gender)

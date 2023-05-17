@@ -21,7 +21,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <span t-field="o.name_id"/>
+                                    <span t-field="o.partner_id"/>
                                 </td>
                                 <td>
                                     <span t-field="o.company"/>
@@ -58,7 +58,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">fleet_management.report_customer_id_card</field>
         <field name="report_file">fleet_management.report_customer_id_card</field>
-        <field name="print_report_name">'customer - %s' % (object.name_id)</field>
+        <field name="print_report_name">'customer - %s' % (object.partner_id)</field>
         <field name="binding_model_id" ref="model_customer_fleet"/>
         <field name="binding_type">report</field>
     </record>

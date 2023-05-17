@@ -7,7 +7,7 @@
         <field name="model">vehicle.fleet</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="model_name"/>
+                <field name="name"/>
                 <field name="vehicle_type"/>
                 <field name="color"/>
                 <field name="model_year"/>
@@ -26,7 +26,7 @@
                     <field name="image" widget="image" class="oe_avatar"/>
                     <group>
                         <group>
-                            <field name="model_name" required="1"/>
+                            <field name="name" required="1"/>
                             <field name="vehicle_type"/>
                         </group>
                     </group>

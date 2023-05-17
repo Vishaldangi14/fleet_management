@@ -21,7 +21,7 @@
         <field name="arch" type="xml">
             <tree decoration-danger="state == 'cancelled'">
                 <field name="customer_id"/>
-                <field name="name_id"/>
+                <field name="vehicle_id"/>
                 <field name="vehicle_number"/>
                 <field name="active" widget="boolean_toggle"/>
                 <field name="category"/>
@@ -48,17 +48,34 @@
                             class='oe_highlight'/>
                     <field name="state" widget="statusbar" nolabel="1" options="{'clickable': '1'}"/>
                     <button name="action_delete" type="object" state="closed" string="Delete"/>
+                    <button name="action_in_progress" type="object" state="closed" string="Done"/>
                     <button name="cron_mail_weekly_remainder" type="object" state="closed" string="Send Mail"
                             class='oe_highlight' icon='fa-envelope'/>
+                    <button name="create_sale" type="object" state="closed" string="Create Sale order"
+                            class='oe_highlight' attrs="{'invisible':[('state','=','done')]}" />
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
+                        <button name="compute_count_sale" type="object" class="oe_stat_button"
+                                attrs="{'invisible':[('state','not in','done')]}" icon="fa-dollar">
+                            <div class="o_field_widget o_stat_info">
+                                <field string=" " name="sale_order_count" widget="statinfo"/>
+                                <span class="o_stat_text">Sales</span>
+                            </div>
+                        </button>
+
                         <button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-users">
                             <div class="o_field_widget o_stat_info">
-                                <field name="payment"/>
+                                <field name="payment" readonly="1"/>
                                 <span class="o_stat_text">payment</span>
                             </div>
                         </button>
+
+<!--                        <button name="createe_roecerd" type="object" class="oe_stat_button" icon="fa-users">-->
+<!--                            <div class="o_field_widget o_stat_info">-->
+<!--                                <span class="o_stat_text">Create</span>-->
+<!--                            </div>-->
+<!--                        </button>-->
 
                         <button name="action_view_services" type="object" class="oe_stat_button" icon="fa-users">
                             <div class="o_field_widget o_stat_info">
@@ -75,7 +92,8 @@
                     </div>
                     <group>
                         <group>
-                            <field name="name_id" required="1" attrs="{'readonly':[('state','=' ,'done')]}"/>
+                            <!-- <field name="vehicle_id" required="1" attrs="{'readonly':[('state','=' ,'done')]}"/> -->
+                            <field name="vehicle_id" required="1"/>
                             <field name="vehicle_number" attrs="{'readonly':[('state','=' ,'done')]}"/>
                             <field name="category" attrs="{'readonly':[('state','=' ,'done')]}"/>
                             <field name="book_date" attrs="{'readonly':[('state','=' ,'done')]}"/>
@@ -85,7 +103,7 @@
                             <field name="engine_number" attrs="{'readonly':[('state','=' ,'done')]}"/>
                         </group>
                         <group>
-                            <field name="customer_id" attrs="{'readonly':[('state','=' ,'done')]}"/>
+                            <field name="customer_id"/>
                             <field name="customer_contact"/>
                             <!--                            <field name="customer_contact" groups="fleet_management.group_fleetmanagement_staff,fleet_management.group_fleetmanagement_manager"/>-->
                             <field name="payment"/>
@@ -94,6 +112,7 @@
                             <field name="submit_date" attrs="{'readonly':[('state','=' ,'done')]}"/>
                             <field name="customer_complaint"/>
                             <field name="rc_book_number" attrs="{'readonly':[('state','=' ,'done')]}"/>
+                            <field name="vehicle_ids" attrs="{'readonly':[('state','=' ,'done')]}"/>
                         </group>
                         <group>
                             <field name="cancel_reason"/>
@@ -147,7 +166,7 @@
         <field name="model">services.fleet</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name_id"/>
+                <field name="vehicle_id"/>
                 <filter name="category" string="Services" domain="[('category', '=', 'services')]"/>
                 <filter name="category" string="Contract" domain="[('category', '=', 'contract')]"/>
             </search>
@@ -163,7 +182,7 @@
 
             <kanban>
                 <field name="id"/>
-                <field name="name_id"/>
+                <field name="vehicle_id"/>
                 <field name="customer_id"/>
                 <field name="vehicle_number"/>
                 <templates>
@@ -176,7 +195,7 @@
                             <div class="oe_kanban_detail">
                                 <bold>
                                     <strong class="o_kanban_record_title">
-                                        <field name="name_id"/>
+                                        <field name="vehicle_id"/>
                                     </strong>
                                 </bold>
                                 <div class="o_kanban_tags_section">

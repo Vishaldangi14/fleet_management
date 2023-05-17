@@ -4,11 +4,11 @@ from datetime import date
 
 class Customer(models.Model):
     _name = 'customer.fleet'
-    _rec_name = 'name_id'
+    _rec_name = 'partner_id'
     _description = 'customer details'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name_id = fields.Many2one('res.partner', string='Customer Name')
+    partner_id = fields.Many2one('res.partner', string='Customer Name')
     company = fields.Many2one('vehicle.fleet', string="Company Name")
     car_name = fields.Char(string="Car Brand")
     age = fields.Integer(string='Age', compute="_compute_age")
@@ -31,7 +31,7 @@ class Customer(models.Model):
             partners = self.env['customer.fleet'].search([])
             print(":::::::::<<<<<>>search>>>>>>>>>::::::::::::", partners)
             print(":::::::::::::::::<<<<<<<<<<<<<map>>>>>>>>>>>>>", partners.mapped("email"))
-            print("::::::::::::::::<<<<<<<<<<partners filtered>>>>>>>>>", partners.filtered(lambda rec: rec.name_id))
+            print("::::::::::::::::<<<<<<<<<<partners filtered>>>>>>>>>", partners.filtered(lambda rec: rec.partner_id))
 
     # @api.depends('division_name')
     # def _compute_division_name(self):
@@ -137,15 +137,6 @@ class Customer(models.Model):
 
     # -----------ir.squence-----------
 
-    # def sale_order(self):
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         'view_mode': 'tree,form',
-    #         'res_model': 'sale.order',
-    #         'views': [(False, 'tree')],
-    #         'view_id': False,
-    #         }
-
     def sale_order(self):
         self.ensure_one()
         rec = {
@@ -153,16 +144,16 @@ class Customer(models.Model):
             'name': 'Customer Fleet',
             'res_model': 'sale.order',
             'view_mode': 'tree,form',
-            'domain': [('partner_id', '=', self.name_id.id)],
+            'domain': [('partner_id', '=', self.partner_id.id)],
             'context': dict(self._context, create=False)
         }
         return rec
 
-    @api.onchange('name_id')
+    @api.onchange('partner_id')
     def _onchange_email_mobile(self):
-        if self.name_id:
-            self.email = self.name_id.email
-            self.mobile = self.name_id.mobile
+        if self.partner_id:
+            self.email = self.partner_id.email
+            self.mobile = self.partner_id.mobile
 
     customer_service = fields.Integer(compute='compute_count_services')
 
@@ -170,9 +161,6 @@ class Customer(models.Model):
         for rec in self:
             rec.customer_service = self.env['services.fleet'].search_count(
                 [('customer_id', 'in', rec.ids)])
-        # print("<<<<<<<<>>>rec>>>>>>>>>>>>", rec)
-        # print("//////////////////rec.customer_service", rec.customer_service)
-        # print("self////////////////////////", self.ids)
 
     def action_view_services(self):
         self.ensure_one()
@@ -193,3 +181,4 @@ class Customer(models.Model):
         vals['customer_seq'] = self.env['ir.sequence'].next_by_code('customer.fleet') or _('New')
         res = super(Customer, self).create(vals)
         return res
+
