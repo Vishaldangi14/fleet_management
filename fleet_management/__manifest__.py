@@ -12,6 +12,7 @@
         'security/ir.model.access.csv',
         'report/report.xml',
         'report/services_report.xml',
+        'report/report _sale.xml',
         'wizard/cancel_view.xml',
         'wizard/customer_view.xml',
         'data/data.xml',

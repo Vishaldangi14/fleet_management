@@ -3,7 +3,7 @@
         <record id="customer_seq_code" model="ir.sequence">
             <field name="name">Customer Code</field>
             <field name="code">customer.fleet</field>
-            <field name="prefix">Services</field>
+            <field name="prefix">SRV00</field>
             <field name="padding">1</field>
             <field name="company_id" eval='False'/>
         </record>

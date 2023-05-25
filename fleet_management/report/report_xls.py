@@ -22,7 +22,6 @@ class ReportXls(models.AbstractModel):
         sheet.write(row, col + 6, 'mobile', bold)
         sheet.write(row, col + 7, 'City', bold)
         sheet.write(row, col + 1, customers.partner_id.name)
-        # customers = self.env['customer.fleet'].search([])
         for s in customers:
             row = row + 1
             col = col

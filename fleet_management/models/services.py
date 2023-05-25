@@ -189,7 +189,7 @@ class Services(models.Model):
             vals = {
                 'partner_id': rec.customer_id.partner_id.id,
                 'service_id': rec.id,
-                'order_line': [(0, 0, {'product_id': product_id.id, 'name': 'services', 'price_unit': 30000})],
+                'order_line': [(0, 0, {'product_id': product_id.id, 'name': rec.category, 'price_unit': rec.payment})],
 
             }
             sale_id = self.env['sale.order'].create(vals)

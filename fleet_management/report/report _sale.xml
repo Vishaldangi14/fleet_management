@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="Sale_report_parser" model="ir.actions.report">
+        <field name="name">Sales Parser</field>
+        <field name="model">customer.fleet</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">fleet_management.sale_parser_id</field>
+        <field name="report_file">fleet_management.sale_parser_id</field>
+        <field name="binding_model_id" ref="model_customer_fleet"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="sale_parser_id">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page"/>
+                    <center>
+                        <h2>Sales Parser</h2>
+                    </center>
+                    <table class="table table-bordered table-secondary o_main_table">
+                        <tbody>
+                            <tr>
+                                <tr>
+                                    <th>Customer Name
+                                        <span>:</span>
+                                        <span t-field="o.partner_id"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Phone
+                                        <span>:</span>
+                                        <span t-field="o.mobile"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Address
+                                        <span>:</span>
+                                        <span t-field="o.street"/>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Pincode
+                                        <span>:</span>
+                                        <span t-field="o.zip"/>
+                                    </th>
+                                </tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered table-secondary o_main_table">
+                        <thead>
+                            <tr>
+                                <th>Service Name</th>
+                                <th>Sale Order</th>
+                                <th>Delivery</th>
+                                <th>Invoice</th>
+                                <th>Amount paid</th>
+                                <th>Amount Due</th>
+                                <th>Amount Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="get_data(o)" t-as="data">
+                                <tr>
+                                    <td>
+                                        <span t-esc="data['service_name']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="data['so_name']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="data['delivery']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="data['invoice']"/>
+                                    </td>
+
+                                    <td>
+                                        <span t-esc="data['amount_paid']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="data['amount_due']"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="data['amount_total']"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -181,4 +181,3 @@ class Customer(models.Model):
         vals['customer_seq'] = self.env['ir.sequence'].next_by_code('customer.fleet') or _('New')
         res = super(Customer, self).create(vals)
         return res
-

@@ -52,6 +52,11 @@
 
                     </div>
                     <field name="image" widget="image" class="oe_avatar"/>
+                     <div class="oe_title">
+                        <h1>
+                            <field name="customer_seq" readonly="1"/>
+                        </h1>
+                    </div>
                     <group>
 <!--                        <group>-->
 <!--                            <field name="partner_id" required="1" string="CUSTOMER" options='{"always_reload": True}'/>-->
@@ -68,7 +73,6 @@
                             <field name="gender"/>
                             <field name="email"/>
                             <field name="birthdate"/>
-                            <field name="customer_seq"/>
                             <field name="company"/>
                             <field name="mobile" widget='phone'/>
                             <!--                            <field name="service_id"/>-->
