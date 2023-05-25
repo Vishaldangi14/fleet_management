@@ -5,67 +5,6 @@ class ReportCustomerReport(models.AbstractModel):
     _name = 'report.fleet_management.sale_parser_id'
     _description = 'Account Report'
 
-    # def _sum_amount(self, data):
-    #     print("::::::::::::::::::::::::::::data::::::::", data)
-    #     total_amount = 0
-    #     if data:
-    #         ctx = self._context
-    #         sale_ids = self.env['sale.order'].search(
-    #             [('partner_id', '=', data.partner_id.id), ('state', '=', 'sale')]).mapped('')
-    #         print("sale_ids:::::::::::::::", sale_ids)
-    #
-    #         for p in sale_ids:
-    #             total_amount = p.amount_total
-    #         print("::::::::::toatl", total_amount)
-    #         # 5/0
-    #         return total_amount
-    #
-    # def _sum_amount_paid(self, data):
-    #     print("::::::::::::::::::::::::::::data::::::::", data)
-    #     total_amount_paid = 0
-    #     if data:
-    #         ctx = self._context
-    #         # self._sum_amount('')
-    #         sale_ids = self.env['sale.order'].search(
-    #             [('partner_id', '=', data.partner_id.id), ('state', '=', 'sale')])
-    #         print("sale_ids:::::::::::::::", sale_ids)
-    #
-    #         for p in sale_ids:
-    #             total_amount_paid = p.amount_total
-    #
-    #         return total_amount_paid
-    #
-    # def _sum_amount_due(self, data):
-    #     print("::::::::::::::::::::::::::::data::::::::", data)
-    #     total_amount_due = 0
-    #     if data:
-    #         ctx = self._context
-    #         sale_ids = self.env['sale.order'].search(
-    #             [('partner_id', '=', data.partner_id.id), ('state', '=', 'sale')])
-    #         print("sale_ids:::::::::::::::", sale_ids)
-    #
-    #         for p in sale_ids:
-    #             total_amount_due = p.amount_total
-    #             print('DUE>>>>>>>>>>>>>>>>>>>>>>>>', total_amount_due)
-    #         # 5/0
-    #         total = total_amount_due - self._sum_amount_paid('total_amount_paid')
-    #         # sale_ids.action_invoice_paid()
-    #         return total
-
-    # def _services(self, data):
-    #     # emp_data = []
-    #     date = self.env['services.fleet'].search(
-    #         [('category', 'in', ('services', 'contract'))])
-    #     print("date>>>>>>>>>>>>>>>>>>>>>::::::::::::::", date)
-    #
-    #     for rec in date:
-    #         print("rec//////////////////", rec)
-    #         vals = {
-    #             'service_id': rec.services_seq,
-    #         }
-    #
-    #     return vals
-
     def _get_data(self, o):
         # data_dict = {}
         data_list = []
@@ -122,7 +61,7 @@ class ReportCustomerReport(models.AbstractModel):
                 "delivery": delivery_id.name,
                 # 'invoice': ", ".join(invoice_list),
                 'invoice': ", ".join(invoice_ids.mapped("name")),
-                'amount_total': amount_total,   
+                'amount_total': amount_total,
                 'amount_paid': paid_amount,
                 'amount_due': amount_due,
             })
